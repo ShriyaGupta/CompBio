@@ -1,0 +1,43 @@
+import numpy as np
+from sklearn.cluster import spectral_clustering
+inp_file = open("../NAPAbench/pairwise/CG_set/Family_1/A.net","r")
+lines = inp_file.readlines()
+mat = []
+deg_a = []
+for i in range(0,3000):
+	mat.append([])
+	deg_a.append(0)
+	for j in range(0,3000):
+		mat[i].append(0)
+for line in lines:
+	tuple = line.strip().split()
+	#print  int(tuple[0][1:])-1	
+	mat[int(tuple[0][1:])-1][int(tuple[1][1:])-1] = 1
+	mat[int(tuple[1][1:])-1][int(tuple[0][1:])-1] = 1
+j = 0
+for i in mat[1]:
+	j = j + 1
+	if i == 1:
+		print j
+		print i	
+G = np.matrix(mat)
+a_labels = spectral_clustering(G, n_clusters=4, n_components=None, eigen_solver=None, random_state=None, n_init=10,eigen_tol=0.0, assign_labels='kmeans')
+#for i in a_labels:
+#	print i
+inp_file_b = open("../NAPAbench/pairwise/CG_set/Family_1/A.net","r")
+lines = inp_file_b.readlines()
+mat_b = []
+for i in range(0,3493):
+        mat_b.append([])
+        for j in range(0,3493):
+                mat_b[i].append(0)
+for line in lines:
+        tuple = line.strip().split()
+        #print  int(tuple[0][1:])-1
+        mat_b[int(tuple[0][1:])-1][int(tuple[1][1:])-1] = 1
+        mat_b[int(tuple[1][1:])-1][int(tuple[0][1:])-1] = 1
+G_b = np.matrix(mat_b)
+b_labels = spectral_clustering(G_b, n_clusters=4, n_components=None, eigen_solver=None, random_state=None, n_init=10,eigen_tol=0.0, assign_labels='kmeans')
+for i in b_labels:
+        print i
+
