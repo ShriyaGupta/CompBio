@@ -1,6 +1,6 @@
 import numpy as np
 from sklearn.cluster import spectral_clustering
-inp_file = open("../NAPAbench/pairwise/CG_set/Family_1/A.net","r")
+inp_file = open("../../../NAPAbench/pairwise/CG_set/Family_1/A.net","r")
 lines = inp_file.readlines()
 mat_a = []
 deg_a = []
@@ -78,7 +78,7 @@ for i in a_clusters[3]:
 		fp_a4.write(" ")
 	fp_a4.write("\n") 
 	row = row + 1
-inp_file_b = open("../NAPAbench/pairwise/CG_set/Family_1/A.net","r")
+inp_file_b = open("../../../NAPAbench/pairwise/CG_set/Family_1/B.net","r")
 lines = inp_file_b.readlines()
 mat_b = []
 deg_b = []
@@ -150,7 +150,12 @@ print a_cluster_num
 print a_cluster_deg
 print b_cluster_num
 print b_cluster_deg
-fp = open("../../../project/NAPAbench/NAPAbench/pairwise/CG_set/Family_1/A-B.sim","r")
+b_index = [i[0] for i in sorted(enumerate(b_cluster_deg), key=lambda x:x[1])]
+a_index = [i[0] for i in sorted(enumerate(a_cluster_deg), key=lambda x:x[1])]
+print a_index
+print b_index
+print mat_b[0][0:20]
+fp = open("../../../NAPAbench/pairwise/CG_set/Family_1/A-B.sim","r")
 lines = fp.readlines()
 mat = []
 for i in range(0,3000):
@@ -159,26 +164,29 @@ for i in range(0,3000):
                 mat[i].append(0)
 for line in lines:
         l = line.strip().split('\t')
-        print int(l[0][1:])
+        #print int(l[0][1:])
         mat[int(l[0][1:])-1][int(l[1][1:])-1] = float(l[2])
-fp_a1_b4 = open("a1_b4.dat","w") 
-for i in a_clusters[0]:
-	for j in b_clusters[3]:
-		fp_a1_b4.write(str(mat[i][j]) + " ")
-	fp_a1_b4.write("\n")
-fp_a2_b1 = open("a2_b1.dat","w") 
-for i in a_clusters[1]:
-	for j in b_clusters[0]:
-		fp_a2_b1.write(str(mat[i][j]) + " ")
-	fp_a2_b1.write("\n")
-fp_a3_b3 = open("a3_b3.dat","w") 
-for i in a_clusters[2]:
-	for j in b_clusters[2]:
-		fp_a3_b3.write(str(mat[i][j]) + " ")
-	fp_a3_b3.write("\n")
-fp_a4_b2 = open("a4_b2.dat","w") 
-for i in a_clusters[3]:
-	for j in b_clusters[1]:
+fp_a1_b1 = open("a_b1.dat","w") 
+for i in a_clusters[a_index[0]]:
+	for j in b_clusters[b_index[0]]:
+		fp_a1_b1.write(str(mat[i][j]) + " ")
+	fp_a1_b1.write("\n")
+fp_a2_b3 = open("a_b2.dat","w") 
+for i in a_clusters[a_index[1]]:
+	for j in b_clusters[b_index[1]]:
+		fp_a2_b3.write(str(mat[i][j]) + " ")
+	fp_a2_b3.write("\n")
+fp_a3_b4 = open("a_b3.dat","w") 
+for i in a_clusters[a_index[2]]:
+	for j in b_clusters[b_index[2]]:
+		fp_a3_b4.write(str(mat[i][j]) + " ")
+	fp_a3_b4.write("\n")
+fp_a4_b2 = open("a_b4.dat","w") 
+for i in a_clusters[a_index[3]]:
+	for j in b_clusters[b_index[3]]:
 		fp_a4_b2.write(str(mat[i][j]) + " ")
 	fp_a4_b2.write("\n")
-			
+fp_a1_b1.close()	
+fp_a2_b3.close()	
+fp_a3_b4.close()	
+fp_a4_b2.close()	
