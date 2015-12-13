@@ -1,6 +1,7 @@
+import matlab.engine
 import numpy as np
 from sklearn.cluster import spectral_clustering
-inp_file = open("../../../NAPAbench/pairwise/CG_set/Family_1/A.net","r")
+inp_file = open("../NAPAbench/pairwise/CG_set/Family_1/A.net","r")
 lines = inp_file.readlines()
 mat_a = []
 deg_a = []
@@ -78,7 +79,11 @@ for i in a_clusters[3]:
 		fp_a4.write(" ")
 	fp_a4.write("\n") 
 	row = row + 1
-inp_file_b = open("../../../NAPAbench/pairwise/CG_set/Family_1/B.net","r")
+fp_a1.close()
+fp_a2.close()
+fp_a3.close()
+fp_a4.close()
+inp_file_b = open("../NAPAbench/pairwise/CG_set/Family_1/B.net","r")
 lines = inp_file_b.readlines()
 mat_b = []
 deg_b = []
@@ -145,7 +150,11 @@ for i in b_clusters[3]:
 		mat[row].append(mat_b[i][j])
 		fp_b4.write(str(mat_b[i][j]))
 		fp_b4.write(" ")
-	fp_b4.write("\n") 
+	fp_b4.write("\n")
+fp_b1.close()
+fp_b3.close()
+fp_b4.close()
+fp_b2.close() 
 print a_cluster_num
 print a_cluster_deg
 print b_cluster_num
@@ -155,7 +164,7 @@ a_index = [i[0] for i in sorted(enumerate(a_cluster_deg), key=lambda x:x[1])]
 print a_index
 print b_index
 print mat_b[0][0:20]
-fp = open("../../../NAPAbench/pairwise/CG_set/Family_1/A-B.sim","r")
+fp = open("../../../project/NAPAbench/NAPAbench/pairwise/CG_set/Family_1/A-B.sim","r")
 lines = fp.readlines()
 mat = []
 for i in range(0,3000):
@@ -190,3 +199,73 @@ fp_a1_b1.close()
 fp_a2_b3.close()	
 fp_a3_b4.close()	
 fp_a4_b2.close()	
+a_index = [x+1 for x in a_index]
+b_index = [x+1 for x in b_index]
+print a_index
+print b_index
+eng = matlab.engine.start_matlab()
+eng.get_align(a_index,b_index,nargout=0)
+fp_align1 = open("node_align1.dat","r")
+fp_align2 = open("node_align2.dat","r")
+fp_align3 = open("node_align3.dat","r")
+fp_align4 = open("node_align4.dat","r")
+aligned_nodes = []
+lines = fp_align1.readlines()
+for line in lines:
+        l = line.strip().split('\t')
+        aligned_nodes.append((a_clusters[a_index[0]-1][int(l[0])],b_clusters[b_index[0]-1][int(l[1])]))
+lines = fp_align2.readlines()
+for line in lines:
+        l = line.strip().split('\t')
+        aligned_nodes.append((a_clusters[a_index[1]-1][int(l[0])],b_clusters[b_index[1]-1][int(l[1])]))
+lines = fp_align3.readlines()
+for line in lines:
+        l = line.strip().split('\t')
+        aligned_nodes.append((a_clusters[a_index[2]-1][int(l[0])],b_clusters[b_index[2]-1][int(l[1])]))
+lines = fp_align4.readlines()
+for line in lines:
+        l = line.strip().split('\t')
+        aligned_nodes.append((a_clusters[a_index[3]-1][int(l[0])],b_clusters[b_index[3]-1][int(l[1])]))
+#print aligned_nodes
+fg1 = open("../NAPAbench/pairwise/CG_set/Family_1/A.fo","r")
+fg2 = open("../NAPAbench/pairwise/CG_set/Family_1/B.fo","r")
+f1 = []
+for i in range(0,3000):
+        f1.append(0)
+lines = fg1.readlines()
+for line in lines:
+        r = line.strip().split('\t')
+        #print r[0][1:]
+        f1[int(r[0][1:])-1] = int(r[1][2:])
+f2 = []
+for i in range(0,4000):
+        f2.append(0)
+lines = fg2.readlines()
+for line in lines:
+        r = line.strip().split('\t')
+        #print r[1][2:]
+        f2[int(r[0][1:])-1] = int(r[1][2:])
+corr = 0
+wrong = 0
+edge_corr = 0
+edge_wrong = 0
+for t in aligned_nodes:
+        if(f1[int(t[0])] == f2[int(t[1])]):
+                print t
+                corr = corr + 1
+        else:
+                wrong  = wrong + 1
+	for s in aligned_nodes:
+		if(mat_a[int(t[0])][int(s[0])] == mat_b[int(t[1])][int(s[1])]):
+			if mat_a[int(t[0])][int(s[0])] == 1:
+				print t
+				print s
+				print mat_a[int(t[0])][int(s[0])]
+				print '\n'
+			edge_corr = edge_corr+1
+		else:
+			edge_wrong = edge_wrong + 1	
+print float(float(corr)/float(wrong+corr))
+print float(float(edge_corr-len(aligned_nodes))/float(edge_wrong+edge_corr-len(aligned_nodes)))
+edge_corr = 0
+edge_wrong = 0
