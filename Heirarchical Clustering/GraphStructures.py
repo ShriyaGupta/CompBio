@@ -19,8 +19,8 @@ class GraphStructures:
         for edge in G.edges_iter() :
             #print edge[0] + " " + edge[1]
             AM[int(edge[0])][int(edge[1])] = 1
-        #file = open("C:\\workspaces\\test.txt", "w")
-        #file.writelines(["%s\n" % item  for item in AM])   
+        file = open("C:\\workspaces\\B_AM.txt", "w")
+        file.writelines(["%s\n" % item  for item in AM])   
         #print AM
         #return AM
         return AM
@@ -47,7 +47,7 @@ class GraphStructures:
                 
         print("here")
                 
-        file = open("C:\\workspaces\\test1.txt", "w")
+        file = open("C:\\workspaces\\A_DM.txt", "w")
         file.writelines(["%s\n" % item  for item in DM])
         #return DM
         return 1
