@@ -1,5 +1,4 @@
-from fileinput import close
-from HeirarchyMain import aligned_nodes
+
 
 class Accuracy :
     
@@ -12,14 +11,14 @@ class Accuracy :
         for line in fg1.readlines():
             line = line.strip().split('\t')
             f1[int(line[0][1:])-1] = int(line[1][2:])
-        close(fg1)
+        fg1.close()
         print("loaded functional groups of network A")
         
         f2 = [0 for row in range(bn)]
         for line in fg2.readlines():
             line = line.strip().split('\t')
             f2[int(line[0][1:])-1] = int(line[1][2:])
-        close(fg2)
+        fg2.close()
         print("loaded functional groups of network B")
            
         corr = 0

@@ -45,7 +45,7 @@ class HeirarchicalCLusutering :
         plt.show()
         
         
-    def sp_connectivity(self,X,connectivity, n_clusters):
+    def sp_connectivity(self,X,connectivity, n_clusters, n):
             
            # plt.figure(figsize=(10, 4))
             
@@ -54,7 +54,7 @@ class HeirarchicalCLusutering :
                                                connectivity=connectivity,
                                                 n_clusters=n_clusters)
             #t0 = time.time()
-            y = np.zeros(shape=(3000))
+            y = np.zeros(shape=(n))
             y = model.fit_predict(X, None)
             #elapsed_time = time.time() - t0
             return y
