@@ -14,7 +14,6 @@ for line in lines:
 	deg_a[int(tuple[0][1:])-1] = deg_a[int(tuple[0][1:])-1] + 1
 	mat_a[int(tuple[0][1:])-1][int(tuple[1][1:])-1] = 1
 	mat_a[int(tuple[1][1:])-1][int(tuple[0][1:])-1] = 1
-j = 0
 X = np.matrix(mat_a)
 #print(X)
 af= AffinityPropagation(preference=-50).fit(X)
