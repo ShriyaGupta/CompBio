@@ -41,8 +41,8 @@ b_index = [i[0] for i in sorted(enumerate(b_cluster_deg), key=lambda x:x[1])]
 for i in range(0,4000):
     if b_labels[i]==b_index[0]:
         b_labels[i]=b_index[1]
-        n_clusters_ = n_clusters_ - 1 
-        print("Number of clusters equaled")
+n_clusters_ = n_clusters_ - 1 
+#print(n_clusters_)
 fp_b = [0]*(n_clusters_+1)
 for k in range(0,n_clusters_):
     fp_b[k+1] = open("b"+str(k+1)+".dat","w")
