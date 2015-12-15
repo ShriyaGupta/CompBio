@@ -14,7 +14,6 @@ for line in lines:
     deg_b[int(tuple[0][1:])-1] = deg_b[int(tuple[0][1:])-1] + 1
     mat_b[int(tuple[0][1:])-1][int(tuple[1][1:])-1] = 1
     mat_b[int(tuple[1][1:])-1][int(tuple[0][1:])-1] = 1
-j = 0
 X = np.matrix(mat_b)
 #print(X)
 af= AffinityPropagation(preference=-58).fit(X)
@@ -43,6 +42,7 @@ for i in range(0,4000):
     if b_labels[i]==b_index[0]:
         b_labels[i]=b_index[1]
         n_clusters_ = n_clusters_ - 1 
+        print("Number of clusters equaled")
 fp_b = [0]*(n_clusters_+1)
 for k in range(0,n_clusters_):
     fp_b[k+1] = open("b"+str(k+1)+".dat","w")
