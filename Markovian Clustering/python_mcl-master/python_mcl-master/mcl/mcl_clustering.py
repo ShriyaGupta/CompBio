@@ -6,6 +6,9 @@
 import numpy as np
 import networkx as nx
 
+match_dict_score = {}
+alignedNodes = {}
+
 def normalize(A):
     column_sums = A.sum(axis=0)
     new_matrix = A / column_sums[np.newaxis, :]
@@ -64,6 +67,63 @@ def stop(M, i):
             return True
 
     return False
+
+
+def match(node_a, node_b):
+    fp_sim = open("C:/Users/mahathi/Documents/academics/compbio/project/NAPAbench/NAPAbench/pairwise/CG_set/Family_1/A-B.sim","r")
+    lines = fp_sim.readlines();
+    for line in lines:
+        l = line.strip().split('\t')
+        if int(l[0][1:]) == int(node_a) and int(l[1][1:]) == int(node_b):
+            fp_sim.close()
+            return float(l[2])
+
+    fp_sim.close()
+    return 0
+
+def getNodeclosestto(node_a):
+    fp_sim = open("C:/Users/mahathi/Documents/academics/compbio/project/NAPAbench/NAPAbench/pairwise/CG_set/Family_1/A-B.sim","r")
+    lines = fp_sim.readlines();
+    for line in lines:
+        l = line.strip().split('\t')
+        if int(l[0][1:]) == int(node_a):
+            fp_sim.close()
+            return int(l[1][1:])
+
+def getsubGraph(clusters_b, node_b):
+    for k, vals in clusters_b.items():
+        if node_b in vals:
+            return vals
+
+def alignSubgraph(list_a, list_b):
+    #print "dummy"
+    for i in list_a:
+        for j in list_b:
+            matchScore = match(i, j)
+            if matchScore  > match_dict_score[i]:
+                match_dict_score[i] = matchScore
+                alignedNodes[i] = j
+    return alignedNodes
+
+def align(clusters_a, clusters_b):
+    print "aligning clusters of a and b"
+    #take a node from a
+    clustVal_a = clusters_a.values()
+    clustLen = clustVal_a.__len__()
+    for i in range(1, clustLen):
+        list_a = clustVal_a.pop()
+        #get an item from a list
+        node_a = list_a[0]
+        #check similarity scores with b
+        node_b = getNodeclosestto(node_a)
+        #find list with this node_b
+        list_b = getsubGraph(clusters_b, node_b)
+        #this will align a subgraph of a to subgraph of b and store in global hashtable
+        if list_a is not None and list_b is not None:
+            alignedNodes = alignSubgraph(list_a, list_b)
+        # calculate accuracy of hashtable
+
+
 
 
 def mcl(M, expand_factor = 2, inflate_factor = 2, max_loop = 10 , mult_factor = 1):
@@ -127,14 +187,82 @@ if __name__ == '__main__':
     print mat_a[1168][1200]
     G = nx.from_numpy_matrix(np.matrix(mat_a))
     print "evaluating clusters..."
-    M, clusters = networkx_mcl(G, expand_factor = 2,
+    M, clusters_a = networkx_mcl(G, expand_factor = 2,
                                inflate_factor = 6,
-                               max_loop = 9,
+                               max_loop = 5,
                                mult_factor = 1)
     print "done\n"
 
-    clusters_to_output(clusters)
+    clusters_to_output(clusters_a)
 
 
-    draw(G, M, clusters)
+    inp_file_b = open("C:/Users/mahathi/Documents/academics/compbio/project/NAPAbench/NAPAbench/pairwise/CG_set/Family_1/B.net","r")
+    lines = inp_file_b.readlines()
+    mat_b = []
+    deg_b = []
+
+    for i in range(0,4000):
+        mat_b.append([])
+	deg_b.append(0)
+        for j in range(0,4000):
+                mat_b[i].append(0)
+
+    for line in lines:
+        tuple = line.strip().split()
+	deg_b[int(tuple[0][1:])-1] = deg_b[int(tuple[0][1:])-1] + 1
+        mat_b[int(tuple[0][1:])-1][int(tuple[1][1:])-1] = 1
+        mat_b[int(tuple[1][1:])-1][int(tuple[0][1:])-1] = 1
+
+    G_b = nx.from_numpy_matrix(np.matrix(mat_b))
+
+    print "evaluating clusters...of b"
+    M, clusters_b = networkx_mcl(G_b, expand_factor = 2,
+                               inflate_factor = 6,
+                               max_loop = 5,
+                               mult_factor = 1)
+    print "done\n"
+
+    clusters_to_output(clusters_b)
+
+    for i in range(1,4000):
+        match_dict_score[i] = 0
+
+    align(clusters_a, clusters_b)
+    print alignedNodes
+
+    #calculate accuracy
+    fg1 = open("C:/Users/mahathi/Documents/academics/compbio/project/NAPAbench/NAPAbench/pairwise/CG_set/Family_1/A.fo","r")
+    fg2 = open("C:/Users/mahathi/Documents/academics/compbio/project/NAPAbench/NAPAbench/pairwise/CG_set/Family_1/B.fo","r")
+
+    f1 = []
+    for i in range(0,3000):
+	f1.append(0)
+    lines = fg1.readlines()
+
+    for line in lines:
+	    r = line.strip().split('\t')
+	    #print r[0][1:]
+	    f1[int(r[0][1:])-1] = int(r[1][2:])
+
+    f2 = []
+    for i in range(0,4000):
+	    f2.append(0)
+
+    lines = fg2.readlines()
+    for line in lines:
+	    r = line.strip().split('\t')
+	    print r[1][2:]
+	    f2[int(r[0][1:])-1] = int(r[1][2:])
+
+    corr = 0
+    wrong = 0
+
+    for k,v in alignedNodes:
+        if(f1[int(k)-1] == f2[int(v)-1]):
+		corr = corr + 1
+	else:
+		wrong  = wrong + 1
+
+    print float(float(corr)/float(wrong+corr))
+    #draw(G, M, clusters)
 
