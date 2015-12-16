@@ -39,9 +39,6 @@ for i in a_labels:
 a_index = [i[0] for i in sorted(enumerate(a_cluster_deg), key=lambda x:x[1])]
 #print(b_index[0])
 
-for i in range(0,3000):
-    if a_labels[i]==a_index[0]:
-        a_labels[i]=a_index[1]
 fp_a = [0]*(n_clusters_+1)
 
 for k in range(0,n_clusters_):
