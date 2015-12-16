@@ -257,7 +257,7 @@ if __name__ == '__main__':
     corr = 0
     wrong = 0
 
-    for k,v in alignedNodes:
+    for k,v in alignedNodes.items():
         if(f1[int(k)-1] == f2[int(v)-1]):
 		corr = corr + 1
 	else:
