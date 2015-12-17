@@ -182,7 +182,7 @@ if __name__ == '__main__':
     print "evaluating clusters..."
     M, clusters_a = networkx_mcl(G, expand_factor = 2,
                                inflate_factor = 6,
-                               max_loop = 9,
+                               max_loop = 5,
                                mult_factor = 1)
     print "done\n"
 
