@@ -1,0 +1,8 @@
+Software Requirements - 
+Python 3.0 or higher (Packages Installed - numpy, sklearn.cluster), 
+Matlab (Package Installed - netalign)
+
+Running - 
+
+Downlowd and extract the source files. Move the contents of folder pairwise/CG_set/Family_1/ into the extracted files folder. From command-line,go into the project folder and run 'python Clustering1.py'. This will generate files of form a[i].DAT. Similarly run 'python Clustering2.py' and 'python Mapping.py' after the first two programs have exceuted, and files of the borm b[i].DAT and a_b[i].DAT will be generated where [i] will be an integral value.
+Thereafter, run the MATLAB file 'align_all.m' with matlab and after it finishes execution, run 'accuracy.py'. Result will be printed to console.
