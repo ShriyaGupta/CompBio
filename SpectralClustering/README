@@ -1,0 +1,6 @@
+
+1. download NET ALIGN from https://www.cs.purdue.edu/homes/dgleich/codes/netalign/
+2. run the command 'export DYLD_LIBRARY_PATH=/System/Library/Frameworks/Python.framework/Versions/2.7/lib:$DYLD_LIBRARY_PATH' to add the lib directory of the correct Python version to the DYLD_LIBRARY_PATH
+3. replace addpath('../../../scripts/netalign/matlab/') with addpath(<path to the matlab dir inside netalign>) in the 3rd line of get_align_cp.m
+4. Now run "python form_adj.py"
+	The program asks for number of clusters(2,3 or 4) and the Family number ( 1 to 6)

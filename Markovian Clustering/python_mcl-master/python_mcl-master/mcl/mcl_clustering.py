@@ -70,7 +70,7 @@ def stop(M, i):
 
 
 def match(node_a, node_b):
-    fp_sim = open("C:/Users/mahathi/Documents/academics/compbio/project/NAPAbench/NAPAbench/pairwise/CG_set/Family_1/A-B.sim","r")
+    fp_sim = open("A-B.sim","r")
     lines = fp_sim.readlines();
     for line in lines:
         l = line.strip().split('\t')
@@ -82,7 +82,7 @@ def match(node_a, node_b):
     return 0
 
 def getNodeclosestto(node_a):
-    fp_sim = open("C:/Users/mahathi/Documents/academics/compbio/project/NAPAbench/NAPAbench/pairwise/CG_set/Family_1/A-B.sim","r")
+    fp_sim = open("A-B.sim","r")
     lines = fp_sim.readlines();
     for line in lines:
         l = line.strip().split('\t')
@@ -162,7 +162,7 @@ def clusters_to_output(clusters):
 
 if __name__ == '__main__':
 
-    inp_file = open("C:/Users/mahathi/Documents/academics/compbio/project/NAPAbench/NAPAbench/pairwise/CG_set/Family_1/A.net","r")
+    inp_file = open("A.net","r")
     lines = inp_file.readlines()
     mat_a = []
     deg_a = []
@@ -177,14 +177,7 @@ if __name__ == '__main__':
 	    mat_a[int(tuple[0][1:])-1][int(tuple[1][1:])-1] = 1
 	    mat_a[int(tuple[1][1:])-1][int(tuple[0][1:])-1] = 1
     j = 0
-    print mat_a[1168][1169]
-    print mat_a[1168][1170]
-    print mat_a[1168][1176]
-    print mat_a[1168][1179]
-    print mat_a[1168][1182]
-    print mat_a[1168][1184]
-    print mat_a[1168][1194]
-    print mat_a[1168][1200]
+
     G = nx.from_numpy_matrix(np.matrix(mat_a))
     print "evaluating clusters..."
     M, clusters_a = networkx_mcl(G, expand_factor = 2,
@@ -195,8 +188,7 @@ if __name__ == '__main__':
 
     clusters_to_output(clusters_a)
 
-
-    inp_file_b = open("C:/Users/mahathi/Documents/academics/compbio/project/NAPAbench/NAPAbench/pairwise/CG_set/Family_1/B.net","r")
+    inp_file_b = open("B.net","r")
     lines = inp_file_b.readlines()
     mat_b = []
     deg_b = []
@@ -231,8 +223,8 @@ if __name__ == '__main__':
     print alignedNodes
 
     #calculate accuracy
-    fg1 = open("C:/Users/mahathi/Documents/academics/compbio/project/NAPAbench/NAPAbench/pairwise/CG_set/Family_1/A.fo","r")
-    fg2 = open("C:/Users/mahathi/Documents/academics/compbio/project/NAPAbench/NAPAbench/pairwise/CG_set/Family_1/B.fo","r")
+    fg1 = open("A.fo","r")
+    fg2 = open("B.fo","r")
 
     f1 = []
     for i in range(0,3000):
@@ -257,12 +249,12 @@ if __name__ == '__main__':
     corr = 0
     wrong = 0
 
-    for k,v in alignedNodes:
+    for k,v in alignedNodes.items():
         if(f1[int(k)-1] == f2[int(v)-1]):
 		corr = corr + 1
 	else:
 		wrong  = wrong + 1
 
     print float(float(corr)/float(wrong+corr))
-    #draw(G, M, clusters)
+
 
