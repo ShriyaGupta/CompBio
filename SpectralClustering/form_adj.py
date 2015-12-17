@@ -1,9 +1,11 @@
+import time
+start_time = time.time()
 import matlab.engine
 import numpy as np
 from sklearn.cluster import spectral_clustering
 inp_num_clusters = input('Give the number of clusters: ')
 inp_family_num = input('Give the family number: ')
-inp_file = open("../NAPAbench/pairwise/CG_set/Family_" + str(inp_family_num) + "/A.net","r")
+inp_file = open("CG_set/Family_" + str(inp_family_num) + "/A.net","r")
 lines = inp_file.readlines()
 mat_a = []
 deg_a = []
@@ -49,7 +51,7 @@ for iter in range(0,inp_num_clusters):
 		fp_a1.write("\n") 
 		row = row + 1
 	fp_a1.close()
-inp_file_b = open("../NAPAbench/pairwise/CG_set/Family_" + str(inp_family_num) + "/B.net","r")
+inp_file_b = open("CG_set/Family_" + str(inp_family_num) + "/B.net","r")
 lines = inp_file_b.readlines()
 mat_b = []
 deg_b = []
@@ -97,7 +99,7 @@ a_index = [i[0] for i in sorted(enumerate(a_cluster_deg), key=lambda x:x[1])]
 print a_index
 print b_index
 print mat_b[0][0:20]
-fp = open("../../../project/NAPAbench/NAPAbench/pairwise/CG_set/Family_" + str(inp_family_num)  + "/A-B.sim","r")
+fp = open("CG_set/Family_" + str(inp_family_num)  + "/A-B.sim","r")
 lines = fp.readlines()
 mat = []
 for i in range(0,3000):
@@ -121,6 +123,7 @@ print a_index
 print b_index
 eng = matlab.engine.start_matlab()
 eng.get_align_cp(a_index,b_index,nargout=0)
+print("--- %s seconds ---" % (time.time() - start_time))
 aligned_nodes = []
 for iter in range(0,inp_num_clusters):
 	fp_align1 = open("node_align" + str(iter+1) +".dat","r")
@@ -129,8 +132,8 @@ for iter in range(0,inp_num_clusters):
         	l = line.strip().split('\t')
 	        aligned_nodes.append((a_clusters[a_index[iter]-1][int(l[0])-1],b_clusters[b_index[iter]-1][int(l[1])-1]))
 #print aligned_nodes
-fg1 = open("../NAPAbench/pairwise/CG_set/Family_"+ str(inp_family_num) +"/A.fo","r")
-fg2 = open("../NAPAbench/pairwise/CG_set/Family_"+ str(inp_family_num) +"/B.fo","r")
+fg1 = open("CG_set/Family_"+ str(inp_family_num) +"/A.fo","r")
+fg2 = open("CG_set/Family_"+ str(inp_family_num) +"/B.fo","r")
 f1 = []
 for i in range(0,3000):
         f1.append(0)
@@ -153,17 +156,11 @@ edge_corr = 0
 edge_wrong = 0
 for t in aligned_nodes:
         if(f1[int(t[0])] == f2[int(t[1])]):
-                print t
                 corr = corr + 1
         else:
                 wrong  = wrong + 1
 	for s in aligned_nodes:
 		if(mat_a[int(t[0])][int(s[0])] == mat_b[int(t[1])][int(s[1])]):
-			if mat_a[int(t[0])][int(s[0])] == 1:
-				print t
-				print s
-				print mat_a[int(t[0])][int(s[0])]
-				print '\n'
 			edge_corr = edge_corr+1
 		else:
 			edge_wrong = edge_wrong + 1	

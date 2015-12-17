@@ -1,6 +1,6 @@
 function []=get_align_cp(a_index,b_index)
     a_size = size(a_index);
-    addpath('netalign/matlab/')
+    addpath('../../../scripts/netalign/matlab/')
     for i = 1:a_size(1,2)
         i
         d = char(strcat('a',[cellfun(@num2str,a_index(i),'un',0).'],'.dat'));
