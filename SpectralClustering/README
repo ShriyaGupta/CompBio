@@ -4,3 +4,4 @@
 3. replace addpath('../../../scripts/netalign/matlab/') with addpath(<path to the matlab dir inside netalign>) in the 3rd line of get_align_cp.m
 4. Now run "python form_adj.py"
 	The program asks for number of clusters(2,3 or 4) and the Family number ( 1 to 6)
+5. My git id is pranneetha 
