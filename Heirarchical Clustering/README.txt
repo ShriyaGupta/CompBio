@@ -38,5 +38,9 @@ The accuracy measures will be printed on the console and cluster files will be a
 
 ************************************************************************
 
+/NAPABench/pairwise/<dataset_name>/<Family_name>/accuracy.png is the plots of accuracies that have been calculated for clusters 1,2,3 &4
+
+*********************************************************************
+
 
 
