@@ -1,6 +1,6 @@
 Software Requirements - 
-Python 3.0 or higher (Packages Installed - numpy, sklearn.cluster), 
-Matlab (Package Installed - netalign)
+Python 3.0 or higher (Packages Installed - numpy, sklearn.cluster -- pip install from commandline or get numpy from http://docs.scipy.org/doc/numpy-1.10.1/user/install.html and sklearn.cluster from http://scikit-learn.org/stable/install.html) 
+Matlab (Package Installed - netalign can be installed from https://www.cs.purdue.edu/homes/dgleich/codes/netalign/)
 
 Running - 
 
